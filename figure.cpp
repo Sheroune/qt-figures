@@ -22,24 +22,21 @@ Figure::Figure(QWidget *parent, std::string fig) :
 
 void Figure::paintEvent(QPaintEvent *event)
 {
-   mult = 2;
+   mult = 2;    // figure scaling
 
+   // base params of the figure
    w = width()  -2;
    h = (height()-height()/3)-2;
-   //x = h/3, r = h/3;
-   //p = w/4, q = w/4;
-
 
    QPainter painter(this);
 
+   // if focus: set red figure color
+   // else black
+   if(hasFocus()) painter.setPen(QColor(255, 0, 0));
+   else      painter.setPen(QColor(0, 0, 0));
 
-   if(hasFocus()) painter.setPen(QColor("#000080"));
-   else      painter.setPen(QColor("#000000"));
 
-   //painter.drawLine(0,0,width()-1,0);
-   //painter.drawLine(0,height()-1,width()-1,height()-1);
-   //painter.drawLine(0,0,0,height()-1);
-   //painter.drawLine(width()-1,0,width()-1,height()-1);
+   // calculation of figure parameters depending on the type (1st or 2nd) and its rendering
 
    painter.scale(1.0/mult,1.0/mult);
    painter.translate((mult*width()/2-w/2),(mult*height()/2-h/2));
@@ -271,18 +268,19 @@ void Figure::paintEvent(QPaintEvent *event)
    }
 }
 
+// select figure and enable delete button
 void Figure::mousePressEvent(QMouseEvent *event){
     oldPos = event->pos();
     emit deleteButton();
 }
 
+// moving figure
 void Figure::mouseMoveEvent(QMouseEvent *event){
-    //QPoint delta = event->pos() - oldPos;
-    //move(pos() + delta);
     if(event->buttons() & Qt::LeftButton){
         QPoint newpos_min = mapToParent(event->pos()-oldPos);
         QPoint newpos_max = QPoint(newpos_min.x() + this->width(), newpos_min.y()+this->height());
 
+        // restriction to move a figure behind the main window
         if(newpos_min.x()>0
             && newpos_min.y()>30
             && newpos_max.x() < this->parentWidget()->width()
@@ -295,7 +293,6 @@ void Figure::mouseMoveEvent(QMouseEvent *event){
 }
 
 void Figure::contextMenuEvent(QContextMenuEvent *event){
-  //menuFigure->exec(event->globalPos());
     QDialog *qd = new QDialog(this);
     qd->setWindowTitle("Figure Context Menu");
     QGridLayout *grid = new QGridLayout(qd);
