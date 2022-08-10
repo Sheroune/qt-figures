@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QButtonGroup>
 #include <QRadioButton>
+#include <QLabel>
 
 class Figure : public QWidget
 {
@@ -37,7 +38,8 @@ protected:
 
 signals:
     void deleteButton();
-public slots:
+
+private slots:
     void rotate();
     void changeWidth();
     void changeHeight();

@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow(){}
 
+// add new figure to the screen
 void MainWindow::addFigure(){
     std::string smth="";
     if(buttonFig1->isChecked())
@@ -67,6 +68,7 @@ void MainWindow::addFigure(){
     buttonDel->setEnabled(false);
 }
 
+// delete focused figure
 void MainWindow::deleteFigure(){
     for(auto it=figures.begin();it<figures.end();it++){
         if((*it)->hasFocus()){
@@ -78,6 +80,7 @@ void MainWindow::deleteFigure(){
     buttonDel->setEnabled(false);
 }
 
+// select figure type 1
 void MainWindow::Toggle1(){
     buttonFig2->setChecked(false);
     if(buttonFig1->isChecked())
@@ -86,6 +89,7 @@ void MainWindow::Toggle1(){
         buttonAdd->setEnabled(false);
 }
 
+// select figure type 2
 void MainWindow::Toggle2(){
     buttonFig1->setChecked(false);
     if(buttonFig2->isChecked())
@@ -94,6 +98,7 @@ void MainWindow::Toggle2(){
         buttonAdd->setEnabled(false);
 }
 
+// enable delete button
 void MainWindow::enableButton(){
     buttonDel->setEnabled(true);
 }

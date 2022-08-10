@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QContextMenuEvent>
 #include <QDialog>
+#include <QPushButton>
 #include <QLabel>
 #include <QGridLayout>
 
@@ -293,12 +294,14 @@ void Figure::mouseMoveEvent(QMouseEvent *event){
 }
 
 void Figure::contextMenuEvent(QContextMenuEvent *event){
+    // creating a dialog window
     QDialog *qd = new QDialog(this);
     qd->setWindowTitle("Figure Context Menu");
     QGridLayout *grid = new QGridLayout(qd);
     qd->setModal(true);
     qd->resize(200,200);
 
+    // width field
     line1 = new QLineEdit(qd);
     connect(line1, SIGNAL(returnPressed()), this, SLOT(changeWidth()));
     QLabel *label1 = new QLabel("Width: ", qd);
@@ -306,6 +309,7 @@ void Figure::contextMenuEvent(QContextMenuEvent *event){
     grid->addWidget(label1,0,0);
     grid->addWidget(line1,0,1);
 
+    // height field
     line2 = new QLineEdit(qd);
     connect(line2, SIGNAL(returnPressed()), this, SLOT(changeHeight()));
     QLabel *label2 = new QLabel("Height: ", qd);
@@ -313,6 +317,7 @@ void Figure::contextMenuEvent(QContextMenuEvent *event){
     grid->addWidget(label2,1,0);
     grid->addWidget(line2,1,1);
 
+    // angle field
     angle = new QLineEdit(qd);
     connect(angle, SIGNAL(returnPressed()), this, SLOT(rotate()));
 
@@ -330,6 +335,7 @@ void Figure::contextMenuEvent(QContextMenuEvent *event){
     grid->addWidget(rad1,3,0);
     grid->addWidget(rad2,3,1);
 
+    // parameters field
     QLabel *label3 = new QLabel("Area: ", qd);
     QLabel *label4 = new QLabel(QString::number(area()), qd);
     grid->addWidget(label3,4,0);
@@ -344,9 +350,12 @@ void Figure::contextMenuEvent(QContextMenuEvent *event){
     delete qd;
 }
 
+// calculates area of the figure
 float Figure::area(){
+    // base area of the rectangle
     float s = h*w;
 
+    // then excesses are subtracted
     if(isdigit(figura[figura.find('E')+1])){
         if(std::stoi(std::string(1,figura[figura.find('E')+1]))==5){
             s-=p*p/2;
@@ -432,6 +441,7 @@ float Figure::area(){
     return s/mult;
 }
 
+// calculates perimeter of the figure
 float Figure::perimeter(){
     float per=2*(w+h);
 
@@ -508,6 +518,7 @@ float Figure::perimeter(){
     return per/mult;
 }
 
+// rotate figure by the angle (in degrees) specifed in the context menu
 void Figure::rotate(){
     std::string angle2=angle->text().toStdString();
     rotateFlag=true;
@@ -521,6 +532,7 @@ void Figure::rotate(){
     else    deg = (deg-std::stoi(angle2))%360;
 }
 
+// change width of the figure specified in the context menu
 void Figure::changeWidth(){
     std::string cwidth=line1->text().toStdString();
     bool widthFlag=true;
@@ -537,6 +549,7 @@ void Figure::changeWidth(){
     }
 }
 
+// change height of the figure specified in the context menu
 void Figure::changeHeight(){
     std::string cheight=line2->text().toStdString();
     bool heightFlag=true;
@@ -547,7 +560,7 @@ void Figure::changeHeight(){
         }
     }
     if(heightFlag){
-        if(std::stoi(cheight)>0 && std::stoi(cheight)<width()){
+        if(std::stoi(cheight)>0){
             this->resize(width(),std::stoi(cheight));
         }
     }
